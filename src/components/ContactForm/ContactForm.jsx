@@ -1,65 +1,73 @@
-import React, { Component } from 'react';
+import React, { useState, useMemo } from 'react';
 import { Form, Label, Input } from './ContactForm.styled';
 import { Button } from '../ContactItem/ContactItem.styled';
 import { nanoid } from 'nanoid';
 
-class ContactForm extends Component {
-  state = {
-    id: nanoid(),
-    name: '',
-    number: '',
+
+const INITIAL_STATE = {
+  name: '',
+  number: '',
+};
+const ContactForm = ({ onSubmit }) => {
+  const [state, setState] = useState({ ...INITIAL_STATE });
+
+
+  const stateChangeHandler = ({ target }) => {
+    const { name, value } = target;
+    setState({
+      ...state,
+      [name]: value,
+    });
   };
 
-
-  stateChangeHandler = (e) => {
-    this.setState({ [e.target.name]: e.target.value });
-  };
-
-  submitHandler = (e) => {
-    const { name, number } = this.state;
+  const submitHandler = (e) => {
+    // const { name, number } = state;
 
     e.preventDefault();
-    this.props.onSubmit(name, number);
-    this.reset();
+    onSubmit(state);
+    reset();
   };
 
-  reset = () => {
-    this.setState({ name: '', number: '' });
+  const reset = () => {
+    setState({
+      name: '',
+      number: '',
+    });
   };
 
-  render() {
-    const { name, number } = this.state;
-    const id = nanoid();
-    return (
-      <Form onSubmit={this.submitHandler}>
-        <Label htmlFor={id + '-name'}>
-          Name
-          <Input
-            id={id + '-name'}
-            type="text"
-            name="name"
-            value={name}
-            pattern="^[a-zA-Zа-яА-Я]+(([' \\-][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$"
-            required
-            onChange={this.stateChangeHandler}
-          />
-        </Label>
-        <Label htmlFor={id + '-phone'}>
-          Number
-          <Input
-            id={id + '-phone'}
-            type="tel"
-            name="number"
-            value={number}
-            pattern="\\+?\\d{1,4}?[ .\\-\\s]?\\(?\\d{1,3}?\\)?[ .\\-\\s]?\\d{1,4}[ .\\-\\s]?\\d{1,4}[ .\\-\\s]?\\d{1,9}"
-            required
-            onChange={this.stateChangeHandler}
-          />
-        </Label>
-        <Button type="submit">Add contact</Button>
-      </Form>
-    );
-  }
-}
+
+  const { name, number } = state;
+  const id = nanoid();
+  return (
+    <Form onSubmit={submitHandler}>
+      <Label htmlFor={id + '-name'}>
+        Name
+        <Input
+          id={id + '-name'}
+          type="text"
+          name="name"
+          value={name}
+          pattern="^[a-zA-Zа-яА-Я]+(([' \\-][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$"
+          required
+          onChange={stateChangeHandler}
+        />
+      </Label>
+      <Label htmlFor={id + '-number'}>
+        Number
+        <Input
+          id={id + '-number'}
+          type="tel"
+          name="number"
+          value={number}
+          pattern="\\+?\\d{1,4}?[ .\\-\\s]?\\(?\\d{1,3}?\\)?[ .\\-\\s]?\\d{1,4}[ .\\-\\s]?\\d{1,4}[ .\\-\\s]?\\d{1,9}"
+          required
+          onChange={stateChangeHandler}
+        />
+      </Label>
+      <Button type="submit">Add contact</Button>
+    </Form>
+  );
+};
+
 
 export default ContactForm;

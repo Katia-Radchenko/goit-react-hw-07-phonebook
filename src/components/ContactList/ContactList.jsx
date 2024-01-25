@@ -5,9 +5,9 @@ import ContactItem from '../ContactItem/ContactItem';
 const ContactList = ({ list, onContactDelete }) => {
   return (
     <List>
-      {list.map((item) => (
+      {list.map((item, index) => (
         <ContactItem
-          key={item.id}
+          key={index}
           id={item.id}
           name={item.name}
           number={item.number}
@@ -17,6 +17,5 @@ const ContactList = ({ list, onContactDelete }) => {
     </List>
   );
 };
-
 
 export default ContactList;
