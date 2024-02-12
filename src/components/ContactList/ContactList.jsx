@@ -1,19 +1,35 @@
 import React from 'react';
 import { List } from './ContactList.styled';
 import ContactItem from '../ContactItem/ContactItem';
+import { useContacts } from '../hooks/useContacts';
+import { useFilter } from '../hooks/useFilter';
 
-const ContactList = ({ list, onContactDelete }) => {
+const ContactList = () => {
+  const { contacts } = useContacts();
+  const { filterValue } = useFilter();
+
+  const getFilteredContacts = () => {
+    const filterToLowercase = filterValue.toLowerCase();
+
+    return contacts.filter(({ name }) =>
+      name.toLowerCase().includes(filterToLowercase)
+    );
+  };
+  const filteredContacts = getFilteredContacts();
+
   return (
     <List>
-      {list.map((item, index) => (
+      {filteredContacts.length > 0 ? (
+        filteredContacts.map(({ id, name, number }, index) => (
         <ContactItem
           key={index}
-          id={item.id}
-          name={item.name}
-          number={item.number}
-          onContactDelete={onContactDelete}
-        />
-      ))}
+          id={id}
+          name={name}
+          number={number}/>
+        ))
+        ) : (
+        <p>There are no contacts</p>
+        )}
     </List>
   );
 };

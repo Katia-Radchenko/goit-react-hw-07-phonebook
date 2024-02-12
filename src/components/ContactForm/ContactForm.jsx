@@ -1,45 +1,58 @@
-import React, { useState, useMemo } from 'react';
+import { useState, useId } from 'react';
+import { useContacts } from '../hooks/useContacts';
+import { useFilter } from '../hooks/useFilter';
 import { Form, Label, Input } from './ContactForm.styled';
 import { Button } from '../ContactItem/ContactItem.styled';
 import { nanoid } from 'nanoid';
 
-
-const INITIAL_STATE = {
-  name: '',
-  number: '',
-};
 const ContactForm = ({ onSubmit }) => {
-  const [state, setState] = useState({ ...INITIAL_STATE });
+  const [name, setName] = useState('');
+  const [number, setNumber] = useState('');
 
+  const { contacts, addContact } = useContacts();
+  const { setFilter } = useFilter();
+  const inputHandler = event => {
+    const { name, value } = event.target;
 
-  const stateChangeHandler = ({ target }) => {
-    const { name, value } = target;
-    setState({
-      ...state,
-      [name]: value,
-    });
+    switch (name) {
+      case 'name':
+        setName(value.trimStart());
+        break;
+      case 'number':
+        setNumber(value.trimStart());
+        break;
+      default:
+        return;
+    }
   };
 
-  const submitHandler = (e) => {
-    // const { name, number } = state;
+  const isInContacts = newName => {
+    const newNameToLowerCase = newName.toLowerCase();
 
-    e.preventDefault();
-    onSubmit(state);
-    reset();
+    return contacts.some(
+      ({ name }) => name.toLowerCase() === newNameToLowerCase
+    );
   };
 
-  const reset = () => {
-    setState({
-      name: '',
-      number: '',
-    });
+  const onSubmitHandler = event => {
+    event.preventDefault();
+    const contactData = { name: name.trimEnd(), number: number.trimEnd() };
+
+    if (isInContacts(contactData.name)) {
+      return alert(`${contactData.name} is in contacts!`);
+    }
+
+    addContact(contactData);
+    setFilter('');
+    setName('');
+    setNumber('');
   };
 
 
-  const { name, number } = state;
+  // const { name, number } = state;
   const id = nanoid();
   return (
-    <Form onSubmit={submitHandler}>
+    <Form onSubmit={onSubmitHandler}>
       <Label htmlFor={id + '-name'}>
         Name
         <Input
@@ -49,7 +62,7 @@ const ContactForm = ({ onSubmit }) => {
           value={name}
           pattern="^[a-zA-Zа-яА-Я]+(([' \\-][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$"
           required
-          onChange={stateChangeHandler}
+          onChange={inputHandler}
         />
       </Label>
       <Label htmlFor={id + '-number'}>
@@ -61,10 +74,10 @@ const ContactForm = ({ onSubmit }) => {
           value={number}
           pattern="\\+?\\d{1,4}?[ .\\-\\s]?\\(?\\d{1,3}?\\)?[ .\\-\\s]?\\d{1,4}[ .\\-\\s]?\\d{1,4}[ .\\-\\s]?\\d{1,9}"
           required
-          onChange={stateChangeHandler}
+          onChange={inputHandler}
         />
       </Label>
-      <Button type="submit">Add contact</Button>
+      <Button type="submit" disabled={!(name && number)}>Add contact</Button>
     </Form>
   );
 };
