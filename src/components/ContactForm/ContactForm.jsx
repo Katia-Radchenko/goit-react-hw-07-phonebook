@@ -5,7 +5,7 @@ import { Form, Label, Input } from './ContactForm.styled';
 import { Button } from '../ContactItem/ContactItem.styled';
 import { nanoid } from 'nanoid';
 
-const ContactForm = ({ onSubmit }) => {
+const ContactForm = () => {
   const [name, setName] = useState('');
   const [number, setNumber] = useState('');
 
