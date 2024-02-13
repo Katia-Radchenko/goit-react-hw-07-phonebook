@@ -1,6 +1,6 @@
 import React from 'react';
 import { Item, Wrapper, Text, Button } from './ContactItem.styled';
-import { useContacts } from '../hooks/useContacts';
+import { useContacts } from '../../hooks/useContacts';
 
 const ContactItem = ({ id, name, number }) => {
   const { deleteContact } = useContacts();

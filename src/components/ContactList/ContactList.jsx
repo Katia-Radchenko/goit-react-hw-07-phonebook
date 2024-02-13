@@ -1,8 +1,8 @@
 import React from 'react';
 import { List } from './ContactList.styled';
 import ContactItem from '../ContactItem/ContactItem';
-import { useContacts } from '../hooks/useContacts';
-import { useFilter } from '../hooks/useFilter';
+import { useContacts } from '../../hooks/useContacts';
+import { useFilter } from '../../hooks/useFilter';
 
 const ContactList = () => {
   const { contacts } = useContacts();

@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { nanoid } from 'nanoid';
-import INITIAL_STATE from '../../../Data/data.json';
+import INITIAL_STATE from '../../Data/data.json';
 
 
 const initialState = {

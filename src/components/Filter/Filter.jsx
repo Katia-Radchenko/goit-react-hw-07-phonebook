@@ -1,6 +1,6 @@
 import React from 'react';
 import { Label, Input } from '../ContactForm/ContactForm.styled';
-import { useFilter } from '../hooks/useFilter';
+import { useFilter } from '../../hooks/useFilter';
 
 const Filter = () => {
   const { filterValue, setFilter } = useFilter();

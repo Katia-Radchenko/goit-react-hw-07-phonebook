@@ -1,6 +1,6 @@
 import { useState} from 'react';
-import { useContacts } from '../hooks/useContacts';
-import { useFilter } from '../hooks/useFilter';
+import { useContacts } from '../../hooks/useContacts';
+import { useFilter } from '../../hooks/useFilter';
 import { Form, Label, Input } from './ContactForm.styled';
 import { Button } from '../ContactItem/ContactItem.styled';
 import { nanoid } from 'nanoid';
