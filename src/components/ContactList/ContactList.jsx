@@ -3,6 +3,7 @@ import { useEffect } from 'react';
 import { List } from './ContactList.styled';
 import ContactItem from '../ContactItem/ContactItem';
 import { useContacts } from '../../hooks/useContacts';
+import { Loader } from '../Loader';
 
 
 const ContactList = () => {
@@ -14,7 +15,7 @@ const ContactList = () => {
 
   return  (
     <>
-      {isLoading && <p>Loading...</p>}
+      {isLoading && <Loader/>}
       {filteredContacts.length > 0 && (
         <List>
           {filteredContacts.map(({ id, name, phone },index) => (
