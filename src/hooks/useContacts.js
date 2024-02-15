@@ -1,13 +1,33 @@
 import { useDispatch, useSelector } from 'react-redux';
-import { selectListContacts  } from '../redux/contacts/contacts-selectors';
-import * as actions from '../redux/contacts/contacts-slice';
+import {
+  selectListContacts,
+  selectIsLoading,
+} from '../redux/contacts/contacts-selectors';
+import * as operations from '../redux/contacts/contactsOperations';
+import { useCallback } from 'react';
+import { selectFilteredContacts } from '../redux/compoundSelectors';
 
 export const useContacts = () => {
   const dispatch = useDispatch();
 
-  const contacts = useSelector(selectListContacts );
-  const addContact = contact => dispatch(actions.addContact(contact));
-  const deleteContact = id => dispatch(actions.deleteContact(id));
+  const fetchContacts = useCallback(
+    () => dispatch(operations.fetchContacts()),
+    [dispatch]
+  );
+  const addContact = contact =>
+    dispatch(operations.addContact(contact)).unwrap();
+  const deleteContact = id => dispatch(operations.deleteContact(id)).unwrap();
 
-  return { contacts, addContact, deleteContact };
+  const isLoading = useSelector(selectIsLoading);
+  const contacts = useSelector(selectListContacts);
+  const filteredContacts = useSelector(selectFilteredContacts);
+
+  return {
+    fetchContacts,
+    addContact,
+    deleteContact,
+    isLoading,
+    contacts,
+    filteredContacts,
+  };
 };

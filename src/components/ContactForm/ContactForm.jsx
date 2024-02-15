@@ -4,10 +4,12 @@ import { useFilter } from '../../hooks/useFilter';
 import { Form, Label, Input } from './ContactForm.styled';
 import { Button } from '../ContactItem/ContactItem.styled';
 import { nanoid } from 'nanoid';
+import { toast } from 'react-toastify';
 
 const ContactForm = () => {
   const [name, setName] = useState('');
   const [number, setNumber] = useState('');
+  const [adding, setAdding] = useState(false);
 
   const { contacts, addContact } = useContacts();
   const { setFilter } = useFilter();
@@ -34,15 +36,22 @@ const ContactForm = () => {
     );
   };
 
-  const onSubmitHandler = event => {
+  const onSubmitHandler = async event => {
     event.preventDefault();
     const contactData = { name: name.trimEnd(), number: number.trimEnd() };
 
     if (isInContacts(contactData.name)) {
       return alert(`${contactData.name} is in contacts!`);
     }
-
-    addContact(contactData);
+    try {
+      setAdding(true);
+      await addContact(contactData);
+      toast(`Contact ${name} added`);
+    } catch (error) {
+      toast.error(`Unable to add contact! ${error}`);
+    } finally {
+      setAdding(false);
+    }
     setFilter('');
     setName('');
     setNumber('');
