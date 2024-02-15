@@ -9,7 +9,7 @@ import { toast } from 'react-toastify';
 const ContactForm = () => {
   const [name, setName] = useState('');
   const [number, setNumber] = useState('');
-  const [adding, setAdding] = useState(false);
+  // const [adding, setAdding] = useState(false);
 
   const { contacts, addContact } = useContacts();
   const { setFilter } = useFilter();
@@ -44,13 +44,13 @@ const ContactForm = () => {
       return alert(`${contactData.name} is in contacts!`);
     }
     try {
-      setAdding(true);
+      // setAdding(true);
       await addContact(contactData);
       toast(`Contact ${name} added`);
     } catch (error) {
       toast.error(`Unable to add contact! ${error}`);
     } finally {
-      setAdding(false);
+      // setAdding(false);
     }
     setFilter('');
     setName('');
