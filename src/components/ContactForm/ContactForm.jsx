@@ -6,10 +6,11 @@ import { Button } from '../ContactItem/ContactItem.styled';
 import { nanoid } from 'nanoid';
 import { toast } from 'react-toastify';
 
+
 const ContactForm = () => {
   const [name, setName] = useState('');
   const [number, setNumber] = useState('');
-  // const [adding, setAdding] = useState(false);
+  const [adding, setAdding] = useState(false);
 
   const { contacts, addContact } = useContacts();
   const { setFilter } = useFilter();
@@ -36,29 +37,32 @@ const ContactForm = () => {
     );
   };
 
+
+
   const onSubmitHandler = async event => {
     event.preventDefault();
-    const contactData = { name: name.trimEnd(), number: number.trimEnd() };
+    const contactData = { name: name.trimEnd(), phone: number.trimEnd() };
 
     if (isInContacts(contactData.name)) {
       return alert(`${contactData.name} is in contacts!`);
     }
+
     try {
-      // setAdding(true);
+      setAdding(true);
       await addContact(contactData);
       toast(`Contact ${name} added`);
     } catch (error) {
       toast.error(`Unable to add contact! ${error}`);
     } finally {
-      // setAdding(false);
+      setAdding(false);
     }
+
     setFilter('');
     setName('');
     setNumber('');
   };
 
 
-  // const { name, number } = state;
   const id = nanoid();
   return (
     <Form onSubmit={onSubmitHandler}>
@@ -86,7 +90,9 @@ const ContactForm = () => {
           onChange={inputHandler}
         />
       </Label>
-      <Button type="submit" disabled={!(name && number)}>Add contact</Button>
+      <Button type="submit" disabled={!(name && number) || adding}>
+      {adding ?'Adding...'  : 'Add contact'}
+    </Button>
     </Form>
   );
 };
